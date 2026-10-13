@@ -1,4 +1,3 @@
-cat > PROJECT_CONTEXT.md <<'EOF'
 # Bibliophile's Pen & Voice (BPV) — Project Context
 
 ## Purpose
@@ -16,9 +15,10 @@ This file is the project's handoff/source of truth. If continuing in another Cha
 ## Current status
 
 - Website project has not yet been created.
-- We are at the planning/handoff stage.
-- The user works from an Android phone using Termux and prefers step-by-step commands.
-- Do not start coding or provide setup commands until the user confirms they are ready.
+- Planning and handoff documentation is complete, and the user has confirmed readiness to begin implementation.
+- README.md and PROJECT_CONTEXT.md are committed and pushed to the private GitHub repository.
+- The user works from an Android phone using Termux and requires exactly one terminal command at a time, with verification before the next command.
+- The typography benchmark is Facebook's interface across headings, body text, cards, buttons, navigation, forms, pricing, and the admin dashboard.
 - Once setup begins, give exactly one terminal command at a time, then wait for the user to return the result before giving the next command.
 - Preserve existing work if a project already exists; inspect before modifying files.
 
@@ -31,7 +31,10 @@ This file is the project's handoff/source of truth. If continuing in another Cha
   - White: `#FFFFFF`
   - Soft green: `#EAF4ED`
   - Light border: `#D8E3DC`
-- Typography: clean sans-serif such as Inter. Keep font sizing comparable to Facebook/WhatsApp in perceived readability: normal mobile text around 14–16px, form inputs around 16px, modest headings. Do not claim to reproduce their exact fonts or sizes.
+- Typography benchmark: Facebook's interface is the primary standard for sizing and readability throughout BPV. Apply a consistent Facebook-inspired scale to headings, body text, cards, buttons, navigation, labels, form fields, pricing, status indicators, and the admin dashboard.
+- Match Facebook's restrained interface typography and component hierarchy as closely as practical across mobile screen sizes. Avoid oversized headings, exaggerated button text, oversized card labels, or unnecessarily large body text.
+- Use a clean sans-serif stack and verify actual rendered sizes on mobile. Facebook uses different sizes for different components and devices, so measure and tune each component against the Facebook interface rather than forcing every element to use one font size.
+- Keep text comfortably readable, with clear hierarchy, appropriate line height, and accessible contrast while preserving the strict white-and-green palette.
 - Style: clean, minimal, elegant, warm, personal, human, professional, mobile-first. Avoid a generic corporate or marketplace look.
 - Use the existing BPV logo/promotional assets as references when the user supplies them.
 - Keep pages concise; do not build a broad website.
@@ -217,6 +220,6 @@ Do not add:
 
 ## Next step
 
-The project context/handoff document has been prepared before creating the website.
+The README and project context have been created and pushed to GitHub. The user has confirmed readiness to begin implementation.
 
-The next stage is to create the README and then scaffold the React/Vite application step by step in Termux, following the one-command-at-a-time rule.
+Next: inspect the repository and available Termux tooling, then scaffold the React/Vite application step by step. Test meaningful milestones and update this document before each milestone commit and push.
