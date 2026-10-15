@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local backups and sensitive environment files
+backups/
+.env
+.env.*
+!.env.example
+
+# Local snapshots and backup copies
+*.bak
+*.before-*
+*.vite-backup
+package.json.before-payment-verification
+
+# Accidental files requiring later inspection
+/span,
+/span:first-child
+/strong
