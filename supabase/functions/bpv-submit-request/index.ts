@@ -1,3 +1,4 @@
+
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
@@ -51,7 +52,10 @@ const allowedMessageTypes = new Set([
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
   });
 }
 
@@ -67,8 +71,12 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json();
 
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return jsonResponse({ error: "Invalid request body." }, 400);
+    }
+
     const customerName = String(body.customerName ?? "").trim();
-    const email = String(body.email ?? "").trim();
+    const email = String(body.email ?? "").trim().toLowerCase();
     const phone = String(body.phone ?? "").trim();
     const recipientName = String(body.recipientName ?? "").trim();
     const recipientPhone = String(body.recipientPhone ?? "").trim();
@@ -88,10 +96,14 @@ Deno.serve(async (req: Request) => {
       !instructions ||
       !service ||
       !submittedMessageType ||
+      !delivery ||
       !preferredDeliveryAt
     ) {
       return jsonResponse(
-        { error: "Please complete all required booking fields." },
+        {
+          error:
+            "Please complete all required fields, including delivery date and time.",
+        },
         400,
       );
     }
@@ -114,7 +126,7 @@ Deno.serve(async (req: Request) => {
       return jsonResponse({ error: "Enter a valid email address." }, 400);
     }
 
-    if (!(service in servicePrices)) {
+    if (!Object.hasOwn(servicePrices, service)) {
       return jsonResponse({ error: "Invalid service selection." }, 400);
     }
 
@@ -138,9 +150,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const now = Date.now();
     const minimumTime =
-      now + (delivery === "standard" ? 3 * 60 * 60 * 1000 : 0);
+      Date.now() + (delivery === "standard" ? 3 * 60 * 60 * 1000 : 0);
 
     if (deliveryDate.getTime() < minimumTime) {
       return jsonResponse(
@@ -154,16 +165,16 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const urgentFee = delivery === "urgent" ? 1000 : 0;
-    const amountNgn = servicePrices[service] + urgentFee;
-
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!supabaseUrl || !serviceRoleKey) {
       console.error("Required server environment variables are missing.");
       return jsonResponse(
-        { error: "Booking service is not configured. Please try again later." },
+        {
+          error:
+            "Booking service is not configured. Please try again later.",
+        },
         500,
       );
     }
@@ -174,6 +185,9 @@ Deno.serve(async (req: Request) => {
         persistSession: false,
       },
     });
+
+    const urgentFee = delivery === "urgent" ? 1000 : 0;
+    const amountNgn = servicePrices[service] + urgentFee;
 
     const { data, error } = await supabase
       .from("bpv_requests")
@@ -201,22 +215,33 @@ Deno.serve(async (req: Request) => {
     if (error) {
       console.error("Booking insert failed:", error.message);
       return jsonResponse(
-        { error: "We could not save your request. Please try again later." },
+        {
+          error:
+            "We could not save your request. Please try again later.",
+        },
         500,
       );
     }
 
-    return jsonResponse({
-      success: true,
-      booking: data,
-      message:
-        "Your request has been received. Payment remains pending until BPV verifies it.",
-    }, 201);
+    return jsonResponse(
+      {
+        success: true,
+        booking: data,
+        message:
+          "Your request has been received. Payment remains pending until BPV verifies it.",
+      },
+      201,
+    );
   } catch (error) {
     console.error(
       "Booking request failed:",
       error instanceof Error ? error.message : "Unknown error",
     );
-    return jsonResponse({ error: "Invalid request. Please check your details." }, 400);
+
+    return jsonResponse(
+      { error: "Invalid request. Please check your details." },
+      400,
+    );
   }
 });
+
