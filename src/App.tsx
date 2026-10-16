@@ -110,11 +110,27 @@ function Footer() {
         <div className="footer-links">
           <Link to="/request">Make a request</Link>
           <a href="mailto:bibliophilepenandvoice@gmail.com">Contact</a>
+          <a href="https://wa.me/message/WUJ5LJ3OS5RSP1" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
           <Link to="/admin">Admin</Link>
         </div>
         <small>© {new Date().getFullYear()} Bibliophile's Pen & Voice</small>
       </div>
     </footer>
+  )
+}
+
+function WhatsAppButton() {
+  return (
+    <a
+      className="whatsapp-float"
+      href="https://wa.me/message/WUJ5LJ3OS5RSP1"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with BPV on WhatsApp"
+    >
+      <MessageCircle size={22} />
+      <span>Chat with us</span>
+    </a>
   )
 }
 
@@ -1252,6 +1268,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
+        <WhatsAppButton />
         <CompactNavigation />
       </div>
     </BrowserRouter>
