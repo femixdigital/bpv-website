@@ -92,7 +92,6 @@ Deno.serve(async (req: Request) => {
       !customerName ||
       !email ||
       !phone ||
-      !recipientName ||
       !instructions ||
       !service ||
       !submittedMessageType ||
