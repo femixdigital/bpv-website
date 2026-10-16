@@ -1776,3 +1776,1282 @@ body {
     background: #0d1510;
   }
 }
+
+/* BPV admin sign-in layout correction */
+.inner-page .request-placeholder form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 680px;
+  margin: 24px auto 0;
+  text-align: left;
+}
+
+.inner-page .request-placeholder form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+}
+
+.inner-page .request-placeholder form input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid #39463d;
+  border-radius: 12px;
+  background: #080c09;
+  color: #f5f7f5;
+  font: inherit;
+}
+
+.inner-page .request-placeholder form input:focus {
+  outline: 2px solid #35d47b;
+  outline-offset: 2px;
+}
+
+.inner-page .request-placeholder form button {
+  justify-self: start;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .inner-page .request-placeholder {
+    padding: 24px 18px;
+  }
+
+  .inner-page .request-placeholder form button {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
+
+/* BPV admin sign-in: responsive, vertically aligned fields */
+.admin-signin-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  text-align: left;
+}
+
+.admin-signin-form > svg,
+.admin-signin-form > h2 {
+  align-self: flex-start;
+  margin: 0;
+}
+
+.admin-signin-form .admin-signin-field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.admin-signin-form .admin-signin-field label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.admin-signin-form .admin-signin-field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid #39463d;
+  border-radius: 12px;
+  background: #080c09;
+  color: #f5f7f5;
+  font: inherit;
+}
+
+.admin-signin-form .admin-signin-field input:focus {
+  outline: 2px solid #35d47b;
+  outline-offset: 2px;
+}
+
+.admin-signin-form > button,
+.admin-signin-form > a {
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .admin-signin-form > button,
+  .admin-signin-form > a {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+}
+
+/* BPV premium admin grid */
+.bpv-admin {
+  padding-top: clamp(28px, 5vw, 54px);
+  padding-bottom: 110px;
+}
+
+.admin-grid-heading {
+  margin-bottom: 28px;
+}
+
+.admin-grid-heading h1 {
+  margin: 12px 0 8px;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.admin-grid-heading p,
+.admin-grid-section-heading p {
+  color: #aeb9b1;
+  margin: 0;
+}
+
+.admin-grid-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 42px;
+}
+
+.admin-grid-stat {
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid #29372e;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #121a15, #0b100d);
+}
+
+.admin-grid-stat.featured {
+  border-color: #286b45;
+  background: linear-gradient(145deg, #153421, #0d1711);
+}
+
+.admin-grid-stat > span,
+.admin-grid-stat small {
+  display: block;
+  color: #aeb9b1;
+  font-size: .8rem;
+}
+
+.admin-grid-stat strong {
+  display: block;
+  margin: 14px 0 11px;
+  color: #f4f8f5;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  letter-spacing: -.04em;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-stat.featured strong,
+.admin-grid-stat .admin-secure-label {
+  color: #55e393;
+}
+
+.admin-grid-stat small {
+  font-size: .74rem;
+}
+
+.admin-grid-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.admin-grid-section-heading h2 {
+  margin: 8px 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -.03em;
+}
+
+.admin-grid-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #29372e;
+}
+
+.admin-grid-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-grid-filters button {
+  padding: 9px 14px;
+  border: 1px solid #29372e;
+  border-radius: 999px;
+  background: #0d120f;
+  color: #c2cdc5;
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.admin-grid-filters button.selected {
+  border-color: #35d47b;
+  background: #153421;
+  color: #55e393;
+}
+
+.admin-grid-filters button span {
+  margin-left: 4px;
+  opacity: .8;
+}
+
+.admin-grid-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 18px;
+}
+
+.admin-grid-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 21px;
+  border: 1px solid #2b3930;
+  border-radius: 19px;
+  background: linear-gradient(155deg, #121a15, #0c110e);
+}
+
+.admin-grid-card-head,
+.admin-grid-payment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-grid-card-head {
+  align-items: flex-start;
+  padding-bottom: 17px;
+  border-bottom: 1px solid #29352d;
+}
+
+.admin-grid-overline {
+  color: #91a397;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+}
+
+.admin-grid-card-head h3 {
+  margin: 7px 0 0;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 48%;
+  padding: 6px 10px;
+  border: 1px solid #34453a;
+  border-radius: 999px;
+  background: #18221b;
+  color: #c5d1c8;
+  font-size: .71rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-status.pending {
+  border-color: #6b5226;
+  background: #2b2111;
+  color: #f1c879;
+}
+
+.admin-grid-status.unpaid {
+  border-color: #713e3b;
+  background: #2b1716;
+  color: #f0a09a;
+}
+
+.admin-grid-customer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0;
+}
+
+.admin-grid-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  border: 1px solid #286b45;
+  border-radius: 14px;
+  background: #153421;
+  color: #55e393;
+  font-size: 1.1rem;
+  font-weight: 750;
+}
+
+.admin-grid-customer-info {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-grid-customer-info strong {
+  color: #f1f5f2;
+  font-size: .94rem;
+}
+
+.admin-grid-customer-info span {
+  color: #aeb9b1;
+  font-size: .79rem;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 12px;
+  padding: 17px 0;
+  border-top: 1px solid #29352d;
+}
+
+.admin-grid-details > div,
+.admin-grid-payment > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.admin-grid-details span,
+.admin-grid-payment > div > span {
+  color: #91a397;
+  font-size: .74rem;
+}
+
+.admin-grid-details strong {
+  color: #e4ebe6;
+  font-size: .86rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-payment {
+  padding: 16px 0;
+  border-top: 1px solid #29352d;
+}
+
+.admin-grid-payment > div > strong {
+  color: #55e393;
+  font-size: 1.3rem;
+}
+
+.admin-grid-more {
+  padding-top: 13px;
+  border-top: 1px solid #29352d;
+}
+
+.admin-grid-more summary {
+  color: #55e393;
+  font-size: .82rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.admin-grid-more p {
+  color: #aeb9b1;
+  font-size: .8rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.admin-grid-empty {
+  padding: 36px 20px;
+  border: 1px dashed #34453a;
+  border-radius: 18px;
+  text-align: center;
+  color: #aeb9b1;
+}
+
+.admin-grid-empty h3 {
+  color: #f1f5f2;
+}
+
+.admin-grid-note {
+  margin-top: 23px;
+  color: #91a397;
+  font-size: .77rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 800px) {
+  .admin-grid-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .admin-grid-stat {
+    padding: 17px;
+  }
+
+  .admin-grid-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-grid-toolbar,
+  .admin-grid-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-grid-toolbar > .button,
+  .admin-grid-section-heading > .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-grid-card {
+    padding: 17px;
+  }
+}
+
+/* Interactive summary cards and compact nested booking cards */
+.admin-grid-stat-button {
+  width: 100%;
+  min-height: 145px;
+  appearance: none;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.admin-grid-stat-button:hover,
+.admin-grid-stat-button:focus-visible {
+  transform: translateY(-3px);
+  border-color: #35d47b;
+  outline: none;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+}
+
+.admin-grid-stat-button.active {
+  border-color: #35d47b;
+  box-shadow: inset 0 0 0 1px rgb(53 212 123 / 20%);
+}
+
+.admin-grid-stat-button:focus-visible,
+.admin-grid-filters button:focus-visible,
+.admin-grid-more summary:focus-visible {
+  outline: 2px solid #55e393;
+  outline-offset: 3px;
+}
+
+.admin-grid-stat-button:disabled {
+  cursor: wait;
+  opacity: .8;
+}
+
+.admin-grid-stat-button small {
+  line-height: 1.5;
+}
+
+.admin-grid-bookings {
+  scroll-margin-top: 24px;
+}
+
+.admin-grid-list {
+  gap: 12px;
+}
+
+.admin-grid-card {
+  padding: 16px;
+  border-radius: 15px;
+}
+
+.admin-grid-card-head {
+  padding-bottom: 12px;
+}
+
+.admin-grid-customer {
+  gap: 10px;
+  padding: 13px 0;
+}
+
+.admin-grid-avatar {
+  flex-basis: 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+
+.admin-grid-details {
+  gap: 11px 10px;
+  padding: 13px 0;
+}
+
+.admin-grid-details span {
+  font-size: .69rem;
+}
+
+.admin-grid-details strong {
+  font-size: .79rem;
+  line-height: 1.4;
+}
+
+.admin-grid-payment {
+  padding: 12px 0;
+}
+
+.admin-grid-payment > div > strong {
+  font-size: 1.15rem;
+}
+
+.admin-grid-more {
+  padding-top: 11px;
+}
+
+.admin-grid-more summary {
+  font-size: .77rem;
+}
+
+@media (max-width: 480px) {
+  .admin-grid-stat-button {
+    min-height: 132px;
+    padding: 14px;
+  }
+
+  .admin-grid-stat-button > span {
+    font-size: .75rem;
+  }
+
+  .admin-grid-stat-button strong {
+    margin: 10px 0 8px;
+    font-size: 1.8rem;
+  }
+
+  .admin-grid-stat-button small {
+    font-size: .68rem;
+  }
+
+  .admin-grid-card {
+    padding: 14px;
+  }
+}
+
+/* Final interaction polish for Creative Desk summary cards */
+.admin-grid-stat-button {
+  display: block;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.admin-grid-stat-button:hover,
+.admin-grid-stat-button:focus-visible {
+  transform: translateY(-2px);
+  border-color: #35d47b;
+  outline: 2px solid transparent;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+}
+
+.admin-grid-stat-button.active {
+  border-color: #35d47b;
+  box-shadow: inset 0 0 0 1px rgb(53 212 123 / 24%);
+}
+
+.admin-grid-stat-button:disabled {
+  opacity: .7;
+  cursor: wait;
+}
+
+.admin-grid-filters button[aria-pressed="true"] {
+  border-color: #35d47b;
+}
+
+#admin-recent-bookings {
+  scroll-margin-top: 20px;
+}
+
+/* BPV: cohesive dark-green form controls */
+:root {
+  color-scheme: dark;
+  --bpv-field-bg: #14231a;
+  --bpv-field-bg-focus: #192c20;
+  --bpv-field-border: #304b39;
+  --bpv-field-border-focus: #35d47b;
+  --bpv-field-text: #edf5ef;
+  --bpv-field-placeholder: #9aaa9f;
+}
+
+/* Text fields, dropdowns and message areas */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+select,
+textarea {
+  color-scheme: dark;
+  background-color: var(--bpv-field-bg);
+  color: var(--bpv-field-text);
+  border: 1px solid var(--bpv-field-border);
+  border-radius: 14px;
+  box-shadow: none;
+  accent-color: #35d47b;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+/* Keep placeholder text subtle but readable */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder,
+textarea::placeholder {
+  color: var(--bpv-field-placeholder);
+  opacity: 1;
+}
+
+/* A soft green highlight while the customer is typing */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+select:focus,
+textarea:focus {
+  background-color: var(--bpv-field-bg-focus);
+  border-color: var(--bpv-field-border-focus);
+  color: var(--bpv-field-text);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(53 212 123 / 12%);
+}
+
+/* Dropdown menus */
+select option {
+  background-color: #14231a;
+  color: #edf5ef;
+}
+
+/* Preserve readable text and a natural dark appearance for autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--bpv-field-text);
+  caret-color: var(--bpv-field-text);
+  box-shadow: 0 0 0 1000px var(--bpv-field-bg) inset;
+  border: 1px solid var(--bpv-field-border);
+}
+
+/* Respect disabled controls */
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+/* Keep form controls comfortable on narrow screens */
+@media (max-width: 600px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+  select,
+  textarea {
+    max-width: 100%;
+  }
+}
+
+/* BPV request form: force dropdowns and message textarea into dark theme */
+#root select,
+#root textarea,
+#root select:focus,
+#root textarea:focus,
+#root select:active,
+#root textarea:active {
+  background: #14231a !important;
+  background-color: #14231a !important;
+  color: #edf5ef !important;
+  border: 1px solid #304b39 !important;
+  color-scheme: dark;
+  box-shadow: none;
+}
+
+#root select:focus,
+#root textarea:focus {
+  background: #192c20 !important;
+  background-color: #192c20 !important;
+  border-color: #35d47b !important;
+  box-shadow: 0 0 0 3px rgb(53 212 123 / 12%) !important;
+  outline: none;
+}
+
+#root select option {
+  background-color: #14231a !important;
+  color: #edf5ef !important;
+}
+
+#root textarea::placeholder {
+  color: #9aaa9f !important;
+  opacity: 1;
+}
+
+/* Keep browser autofill from reintroducing white fields */
+#root textarea:-webkit-autofill,
+#root select:-webkit-autofill {
+  -webkit-text-fill-color: #edf5ef !important;
+}
+
+
+/* =========================================
+   BPV PREMIUM DATE & TIME PICKERS
+   ========================================= */
+
+#root input[type="date"],
+#root input[type="time"],
+#root input[type="datetime-local"],
+#root input[type="month"],
+#root input[type="week"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 58px;
+  padding: 15px 17px;
+  border: 1px solid #304b39 !important;
+  border-radius: 15px !important;
+  background-color: #14231a !important;
+  color: #edf5ef !important;
+  color-scheme: dark;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: .01em;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 2%);
+  transition: border-color .2s ease, background-color .2s ease,
+    box-shadow .2s ease;
+}
+
+/* Premium emerald focus state */
+#root input[type="date"]:focus,
+#root input[type="time"]:focus,
+#root input[type="datetime-local"]:focus,
+#root input[type="month"]:focus,
+#root input[type="week"]:focus {
+  background-color: #192c20 !important;
+  border-color: #35d47b !important;
+  color: #f3faf5 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(53 212 123 / 13%) !important;
+}
+
+/* Keep native calendar and clock controls visible */
+#root input[type="date"]::-webkit-calendar-picker-indicator,
+#root input[type="time"]::-webkit-calendar-picker-indicator,
+#root input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+#root input[type="month"]::-webkit-calendar-picker-indicator,
+#root input[type="week"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .85;
+  filter: invert(82%) sepia(20%) saturate(650%) hue-rotate(85deg);
+  transition: opacity .2s ease;
+}
+
+#root input[type="date"]::-webkit-calendar-picker-indicator:hover,
+#root input[type="time"]::-webkit-calendar-picker-indicator:hover,
+#root input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Consistent labels above date and time controls */
+#root input[type="date"],
+#root input[type="time"],
+#root input[type="datetime-local"] {
+  accent-color: #35d47b;
+}
+
+/* Disabled date/time controls */
+#root input[type="date"]:disabled,
+#root input[type="time"]:disabled,
+#root input[type="datetime-local"]:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Comfortable sizing on phones */
+@media (max-width: 600px) {
+  #root input[type="date"],
+  #root input[type="time"],
+  #root input[type="datetime-local"] {
+    min-height: 56px;
+    padding: 14px;
+    border-radius: 13px !important;
+    font-size: 16px;
+  }
+}
+
+/* BPV premium custom delivery date and time picker */
+.bpv-datetime-field {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.bpv-datetime-trigger {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 76px;
+  padding: 15px;
+  border: 1px solid #304b39;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #17271c, #101a13);
+  color: #edf5ef;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bpv-datetime-trigger:hover,
+.bpv-datetime-trigger:focus-visible {
+  border-color: #35d47b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(53 212 123 / 12%);
+}
+
+.bpv-datetime-trigger-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #286b45;
+  border-radius: 13px;
+  background: #153421;
+  color: #55e393;
+  font-size: 1.4rem;
+}
+
+.bpv-datetime-trigger-copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.bpv-datetime-trigger-copy strong {
+  font-size: .94rem;
+  overflow-wrap: anywhere;
+}
+
+.bpv-datetime-trigger-copy small {
+  color: #9aaa9f;
+  font-size: .78rem;
+}
+
+.bpv-datetime-edit {
+  color: #55e393;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.bpv-calendar-panel {
+  padding: 20px;
+  border: 1px solid #304b39;
+  border-radius: 20px;
+  background: linear-gradient(155deg, #121d16, #0b100d);
+  color: #edf5ef;
+  box-shadow: 0 18px 48px rgb(0 0 0 / 25%);
+}
+
+.bpv-calendar-top,
+.bpv-calendar-nav,
+.bpv-calendar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bpv-calendar-top {
+  margin-bottom: 20px;
+}
+
+.bpv-calendar-top h3 {
+  margin: 8px 0 0;
+  font-size: 1.25rem;
+}
+
+.bpv-calendar-nav button {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #304b39;
+  border-radius: 12px;
+  background: #17271c;
+  color: #55e393;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.bpv-calendar-weekdays,
+.bpv-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.bpv-calendar-weekdays {
+  margin-bottom: 8px;
+}
+
+.bpv-calendar-weekdays span {
+  color: #91a397;
+  text-align: center;
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.bpv-calendar-day {
+  min-width: 0;
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: #17231a;
+  color: #e7f0e9;
+  font: inherit;
+  font-size: .84rem;
+  cursor: pointer;
+}
+
+.bpv-calendar-day:hover:not(:disabled) {
+  border-color: #35d47b;
+}
+
+.bpv-calendar-day.outside {
+  color: #718076;
+  background: transparent;
+}
+
+.bpv-calendar-day.chosen {
+  border-color: #35d47b;
+  background: #35d47b;
+  color: #07130b;
+  font-weight: 800;
+}
+
+.bpv-calendar-day:disabled {
+  opacity: .28;
+  cursor: not-allowed;
+}
+
+.bpv-calendar-time {
+  display: grid;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.bpv-calendar-time label {
+  color: #b9c8bd;
+  font-size: .83rem;
+  font-weight: 650;
+}
+
+.bpv-calendar-time input[type="time"] {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #304b39 !important;
+  border-radius: 13px !important;
+  background: #14231a !important;
+  color: #edf5ef !important;
+  color-scheme: dark;
+}
+
+.bpv-calendar-actions {
+  margin-top: 20px;
+}
+
+.bpv-calendar-cancel,
+.bpv-calendar-confirm {
+  min-height: 46px;
+  padding: 11px 15px;
+  border-radius: 12px;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.bpv-calendar-cancel {
+  border: 1px solid #304b39;
+  background: #14231a;
+  color: #d5e2d8;
+}
+
+.bpv-calendar-confirm {
+  flex: 1;
+  border: 1px solid #35d47b;
+  background: #35d47b;
+  color: #07130b;
+}
+
+.bpv-calendar-confirm:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+  .bpv-calendar-panel {
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .bpv-calendar-weekdays,
+  .bpv-calendar-days {
+    gap: 3px;
+  }
+
+  .bpv-calendar-day {
+    border-radius: 8px;
+    font-size: .78rem;
+  }
+
+  .bpv-datetime-trigger {
+    padding: 12px;
+  }
+}
+
+/* BPV Premium Booking & Payment Card */
+.request-review .bpv-booking-success {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(22px, 5vw, 34px);
+  color: #f2f8f4;
+  background:
+    radial-gradient(ellipse at top right, rgba(45, 190, 112, 0.10), transparent 48%),
+    linear-gradient(145deg, #101c14 0%, #0b130e 65%, #0d1911 100%);
+  border: 1px solid rgba(91, 211, 143, 0.24);
+  border-radius: 26px;
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.request-review .bpv-booking-success-heading {
+  gap: 14px;
+  align-items: center;
+}
+
+.request-review .bpv-booking-success-heading > svg {
+  flex-shrink: 0;
+  color: #42df91;
+  filter: drop-shadow(0 0 12px rgba(66, 223, 145, 0.16));
+}
+
+.request-review .bpv-booking-success-heading h3 {
+  color: #f4fff7;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.request-review .bpv-booking-divider {
+  height: 1px;
+  margin: 24px 0;
+  background: linear-gradient(
+    90deg,
+    rgba(76, 213, 135, 0.38),
+    rgba(76, 213, 135, 0.08)
+  );
+}
+
+.request-review .bpv-booking-label,
+.request-review .bpv-booking-amount > span:first-child,
+.request-review .bpv-booking-payment > span:first-child {
+  color: #a8bbae;
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: 0.035em;
+}
+
+.request-review .bpv-booking-reference {
+  color: #55e59a;
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.request-review .bpv-booking-copy {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  color: #effff5;
+  background: rgba(58, 180, 105, 0.055);
+  border: 1px solid rgba(113, 221, 157, 0.32);
+  border-radius: 15px;
+  font-weight: 650;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.request-review .bpv-booking-copy:hover {
+  background: rgba(58, 180, 105, 0.12);
+  border-color: rgba(113, 221, 157, 0.65);
+}
+
+.request-review .bpv-booking-copy:active {
+  transform: scale(0.99);
+}
+
+.request-review .bpv-booking-amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 26px 0;
+  padding: 23px;
+  background: linear-gradient(135deg, #173725, #11281b);
+  border: 1px solid rgba(84, 218, 137, 0.2);
+  border-radius: 19px;
+}
+
+.request-review .bpv-booking-amount strong {
+  color: #ffffff;
+  font-size: clamp(25px, 6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.request-review .bpv-opay-card {
+  margin-top: 28px;
+  padding: clamp(18px, 4vw, 25px);
+  background: rgba(18, 31, 22, 0.82);
+  border: 1px solid rgba(110, 160, 126, 0.2);
+  border-radius: 21px;
+}
+
+.request-review .bpv-opay-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 17px;
+}
+
+.request-review .bpv-opay-eyebrow {
+  color: #69dda0;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+
+.request-review .bpv-opay-heading h4 {
+  margin: 7px 0 0;
+  color: #f4fff7;
+  font-size: clamp(20px, 4.5vw, 25px);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+.request-review .bpv-opay-logo {
+  flex-shrink: 0;
+  padding: 10px 13px;
+  color: #6de4a3;
+  background: #193a27;
+  border: 1px solid rgba(109, 228, 163, 0.18);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.request-review .bpv-opay-instructions {
+  margin: 0 0 21px;
+  color: #b3c2b7;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.request-review .bpv-opay-detail,
+.request-review .bpv-opay-account {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 0;
+  border-top: 1px solid rgba(145, 179, 154, 0.13);
+}
+
+.request-review .bpv-opay-detail > span,
+.request-review .bpv-opay-account > div > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #9fb2a5;
+  font-size: 12px;
+}
+
+.request-review .bpv-opay-detail > strong,
+.request-review .bpv-opay-account > div > strong {
+  display: block;
+  color: #f1f9f3;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.request-review .bpv-opay-account {
+  gap: 12px;
+}
+
+.request-review .bpv-opay-account > div {
+  min-width: 0;
+}
+
+.request-review .bpv-opay-copy {
+  display: inline-flex;
+  flex-shrink: 0;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  color: #a4f2c2;
+  background: #193a27;
+  border: 1px solid rgba(101, 220, 151, 0.23);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.request-review .bpv-opay-copy:hover {
+  background: #224a32;
+  border-color: rgba(101, 220, 151, 0.5);
+}
+
+/* Admin booking actions */
+.admin-grid-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.admin-grid-actions .button {
+  min-width: 0;
+}

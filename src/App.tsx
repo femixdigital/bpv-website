@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   ArrowRight,
   BookOpen,
@@ -254,13 +254,32 @@ function RequestPage() {
   const [customerName, setCustomerName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [recipientName, setRecipientName] = useState('')
+  const [recipientName] = useState('')
   const [recipientPhone, setRecipientPhone] = useState('')
   const [service, setService] = useState(prices[0].name)
   const [messageType, setMessageType] = useState('Love & Romance')
   const [instructions, setInstructions] = useState('')
   const [delivery, setDelivery] = useState('standard')
   const [preferredDeliveryAt, setPreferredDeliveryAt] = useState('')
+
+  const [datePickerOpen, setDatePickerOpen] = useState(false)
+  const [draftDate, setDraftDate] = useState(() => {
+    const d = new Date(minimumDeliveryDateTime(3))
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  })
+  const [draftTime, setDraftTime] = useState(() => {
+    const d = new Date(minimumDeliveryDateTime(3))
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+  })
+  const [calendarMonth, setCalendarMonth] = useState(() => new Date())
+  const calendarFirst = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1)
+  const calendarStart = new Date(calendarFirst)
+  calendarStart.setDate(calendarFirst.getDate() - calendarFirst.getDay())
+  const calendarDays = Array.from({ length: 42 }, (_, i) => {
+    const d = new Date(calendarStart)
+    d.setDate(calendarStart.getDate() + i)
+    return d
+  })
   const [reviewing, setReviewing] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submissionError, setSubmissionError] = useState('')
@@ -275,7 +294,6 @@ function RequestPage() {
   const urgentFee = delivery === 'urgent' ? 1000 : 0
   const total = selectedPrice.price + urgentFee
   function minimumDeliveryDateTime(hoursAhead: number) {
-    // eslint-disable-next-line react-hooks/purity -- Calculate the booking form's minimum delivery time.
     const date = new Date(Date.now() + hoursAhead * 60 * 60 * 1000)
     date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
     
@@ -286,6 +304,13 @@ function RequestPage() {
 
   function handleReview(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    if (!preferredDeliveryAt || Number.isNaN(new Date(preferredDeliveryAt).getTime())) {
+      setSubmissionError('Please select and confirm your delivery date and time.')
+      return
+    }
+
+    setSubmissionError('')
     setReviewing(true)
   }
 
@@ -396,42 +421,124 @@ function RequestPage() {
                 {prices.map((item) => <option key={item.name} value={item.name}>{item.name} — {formatNaira(item.price)}</option>)}
               </select>
             </label>
-            <label>
-              Recipient's name
-              <input required value={recipientName} onChange={(e) => setRecipientName(e.target.value)} placeholder="Who is this message for?" />
-            </label>
+            <div className="bpv-datetime-field">
+              <button type="button" className="bpv-datetime-trigger" onClick={() => setDatePickerOpen(!datePickerOpen)} aria-expanded={datePickerOpen}>
+                <span className="bpv-datetime-trigger-icon">▦</span>
+                <span className="bpv-datetime-trigger-copy">
+                  <strong>{preferredDeliveryAt ? new Date(preferredDeliveryAt).toLocaleString('en-NG', { dateStyle: 'medium', timeStyle: 'short' }) : 'Choose delivery date and time'}</strong>
+                  <small>{preferredDeliveryAt ? 'Tap to change your selection' : 'Select a date and preferred time'}</small>
+                </span>
+                <span className="bpv-datetime-edit">Choose</span>
+              </button>
+
+              {datePickerOpen && (
+                <div className="bpv-calendar-panel">
+                  <div className="bpv-calendar-top">
+                    <div>
+                      <span className="eyebrow">DELIVERY SCHEDULING</span>
+                      <h3>{calendarMonth.toLocaleDateString('en', { month: 'long', year: 'numeric' })}</h3>
+                    </div>
+                    <div className="bpv-calendar-nav">
+                      <button type="button" aria-label="Previous month" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))}>‹</button>
+                      <button type="button" aria-label="Next month" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))}>›</button>
+                    </div>
+                  </div>
+
+                  <div className="bpv-calendar-weekdays">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => <span key={day}>{day}</span>)}
+                  </div>
+
+                  <div className="bpv-calendar-days">
+                    {calendarDays.map((day, index) => {
+                      const minDate = new Date(minimumDeliveryDateTime(delivery === 'urgent' ? 0 : 3))
+                      const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate())
+                      const minStart = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())
+                      const disabled = dayStart < minStart
+                      const chosen = draftDate === `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`
+                      return (
+                        <button key={`${day.toISOString()}-${index}`} type="button" disabled={disabled} className={'bpv-calendar-day' + (day.getMonth() !== calendarMonth.getMonth() ? ' outside' : '') + (chosen ? ' chosen' : '')} onClick={() => setDraftDate(`${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`)}>
+                          {day.getDate()}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  <div className="bpv-calendar-time">
+                    <label htmlFor="bpv-delivery-time">Preferred time</label>
+                    <input id="bpv-delivery-time" type="time" value={draftTime} onChange={(e) => setDraftTime(e.target.value)} required />
+                  </div>
+
+                  <div className="bpv-calendar-actions">
+                    <button type="button" className="bpv-calendar-cancel" onClick={() => setDatePickerOpen(false)}>Cancel</button>
+                    <button type="button" className="bpv-calendar-confirm" disabled={!draftDate || !draftTime || new Date(`${draftDate}T${draftTime}`) < new Date(minimumDeliveryDateTime(delivery === 'urgent' ? 0 : 3))} onClick={() => {
+                      const selectedDateTime = new Date(`${draftDate}T${draftTime}`)
+                      const minimumDateTime = new Date(minimumDeliveryDateTime(delivery === 'urgent' ? 0 : 3))
+
+                      if (!draftDate || !draftTime || Number.isNaN(selectedDateTime.getTime()) || selectedDateTime < minimumDateTime) {
+                        setSubmissionError('Please choose a valid delivery date and time.')
+                        return
+                      }
+
+                      setPreferredDeliveryAt(`${draftDate}T${draftTime}`)
+                      setSubmissionError('')
+                      setDatePickerOpen(false)
+                    }}>Confirm date &amp; time</button>
+                  </div>
+                </div>
+              )}
+              <input type="hidden" value={preferredDeliveryAt} />
+            </div>
             <label>
               Recipient's phone number <span className="form-optional">(if needed)</span>
-              <input type="tel" value={recipientPhone} onChange={(e) => setRecipientPhone(e.target.value)} placeholder="Include country code for calls" />
+              <input
+                type="tel"
+                value={recipientPhone}
+                onChange={(e) => setRecipientPhone(e.target.value)}
+                placeholder="Include country code for calls"
+              />
             </label>
             <label>
               What would you like us to know?
-              <textarea required rows={5} value={instructions} onChange={(e) => setInstructions(e.target.value)} placeholder="Share the occasion, important details, tone, and what you hope to express." />
+              <textarea
+                required
+                rows={5}
+                value={instructions}
+                onChange={(e) => setInstructions(e.target.value)}
+                placeholder="Share the occasion, important details, tone, and what you hope to express."
+              />
             </label>
           </div>
 
           <div className="request-form-section">
             <h2>Delivery preference</h2>
-            <label>
-              Preferred delivery date and time
+
+            <label className="delivery-option">
               <input
-                required
-                type="datetime-local"
-                value={preferredDeliveryAt}
-                min={minimumDeliveryDateTime(delivery === 'urgent' ? 0 : 3)}
-                onChange={(e) => setPreferredDeliveryAt(e.target.value)}
+                type="radio"
+                name="delivery"
+                value="standard"
+                checked={delivery === 'standard'}
+                onChange={() => setDelivery('standard')}
               />
+              <span>
+                <strong>Standard delivery</strong>
+                <small>At least 3 hours after booking, subject to confirmation.</small>
+              </span>
             </label>
             <label className="delivery-option">
-              <input type="radio" name="delivery" value="standard" checked={delivery === 'standard'} onChange={() => setDelivery('standard')} />
-              <span><strong>Standard delivery</strong><small>At least 3 hours after booking, subject to confirmation.</small></span>
-            </label>
-            <label className="delivery-option">
-              <input type="radio" name="delivery" value="urgent" checked={delivery === 'urgent'} onChange={() => setDelivery('urgent')} />
-              <span><strong>Request urgent delivery (+₦1,000)</strong><small>Subject to availability and acceptance.</small></span>
+              <input
+                type="radio"
+                name="delivery"
+                value="urgent"
+                checked={delivery === 'urgent'}
+                onChange={() => setDelivery('urgent')}
+              />
+              <span>
+                <strong>Request urgent delivery (+₦1,000)</strong>
+                <small>Subject to availability and acceptance.</small>
+              </span>
             </label>
           </div>
-
           <div className="request-estimate">
             <span>Estimated service fee</span>
             <strong>{formatNaira(total)}</strong>
@@ -686,24 +793,441 @@ function RequestPage() {
   )
 }
 
+type BPVRequest = {
+  id: string
+  booking_reference: string | null
+  customer_name: string | null
+  customer_email: string | null
+  customer_phone: string | null
+  recipient_name: string | null
+  service_type: string | null
+  message_type: string | null
+  delivery_type: string | null
+  amount_ngn: number | null
+  payment_status: string | null
+  payment_reference: string | null
+  request_status: string | null
+  created_at: string
+}
+
 function AdminPage() {
-  return (
-    <main className="section inner-page">
-      <div className="page-heading">
-        <span className="eyebrow">BPV WORKSPACE</span>
-        <h1>Administration</h1>
-        <p>Manage requests, verify payments, and keep BPV running smoothly.</p>
-      </div>
-      <div className="notice-card"><ShieldCheck size={20} /><p><strong>Private area.</strong> Real admin authentication and database access controls must be configured before any customer information or management actions are available.</p></div>
-      <div className="request-placeholder">
-        <ShieldCheck size={27} />
-        <h2>Secure access is being prepared.</h2>
-        <p>The admin sign-in, request management, payment verification, pricing controls, and content tools will be connected to Supabase with server-enforced access policies.</p>
-        <p className="muted-small">This screen is a placeholder, not an authenticated admin dashboard.</p>
-        <Link className="button button-outline" to="/">Return to home <ArrowRight size={16} /></Link>
-      </div>
-    </main>
+const [email, setEmail] = useState('')
+const [password, setPassword] = useState('')
+const [loading, setLoading] = useState(true)
+const [submitting, setSubmitting] = useState(false)
+const [isAdmin, setIsAdmin] = useState(false)
+const [requests, setRequests] = useState<BPVRequest[]>([])
+const [error, setError] = useState('')
+const [requestFilter, setRequestFilter] = useState('all')
+const [updatingRequestId, setUpdatingRequestId] = useState<string | null>(null)
+
+const verifyAdmin = useCallback(async () => {
+const { data: { session }, error: sessionError } =
+  await supabase.auth.getSession()
+
+setLoading(true)
+setError('')
+
+if (sessionError || !session) {
+  setIsAdmin(false)
+  setLoading(false)
+  return
+}
+
+const { data: adminResult, error: adminError } =
+  await supabase.rpc('is_bpv_admin')
+
+if (adminError || adminResult !== true) {
+  setIsAdmin(false)
+  setError(
+    adminError?.message ||
+      'This account is not authorised to access the BPV admin area.'
   )
+  setLoading(false)
+  return
+}
+
+setIsAdmin(true)
+
+const { data, error: requestError } = await supabase
+  .from('bpv_requests')
+  .select(
+    'id, booking_reference, customer_name, customer_email, customer_phone, recipient_name, service_type, message_type, delivery_type, amount_ngn, payment_status, payment_reference, request_status, created_at'
+  )
+  .order('created_at', { ascending: false })
+  .limit(100)
+
+if (requestError) {
+  setError(`Admin verified, but requests could not be loaded: ${requestError.message}`)
+} else {
+  setRequests(data ?? [])
+}
+
+setLoading(false)
+
+}, [])
+
+const updateBooking = async (
+  request: BPVRequest,
+  updates: {
+    request_status?: 'accepted' | 'in progress' | 'completed' | 'cancelled'
+    payment_status?: 'paid'
+    payment_verified_at?: string
+  },
+  confirmation: string,
+) => {
+  if (!window.confirm(confirmation)) return
+
+  setUpdatingRequestId(request.id)
+  setError('')
+
+  try {
+    const { data, error: updateError } = await supabase
+      .from('bpv_requests')
+      .update(updates)
+      .eq('id', request.id)
+      .select('id')
+      .maybeSingle()
+
+    if (updateError) throw updateError
+    if (!data) {
+      throw new Error('No booking was updated. Refresh the dashboard and try again.')
+    }
+
+    await verifyAdmin()
+  } catch (updateError) {
+    setError(
+      updateError instanceof Error
+        ? updateError.message
+        : 'The booking could not be updated. Please try again.',
+    )
+  } finally {
+    setUpdatingRequestId(null)
+  }
+}
+
+const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+event.preventDefault()
+setSubmitting(true)
+setError('')
+
+const { error: loginError } = await supabase.auth.signInWithPassword({
+  email: email.trim(),
+  password,
+})
+
+if (loginError) {
+  setError(loginError.message)
+  setSubmitting(false)
+  return
+}
+
+await verifyAdmin()
+setPassword('')
+setSubmitting(false)
+
+}
+
+const handleSignOut = async () => {
+setError('')
+const { error: signOutError } = await supabase.auth.signOut()
+
+if (signOutError) {
+  setError(signOutError.message)
+  return
+}
+
+setIsAdmin(false)
+setRequests([])
+setPassword('')
+
+}
+
+useEffect(() => {
+  void Promise.resolve().then(() => verifyAdmin())
+}, [verifyAdmin])
+
+if (loading) {
+return (
+<main className="section inner-page">
+<div className="request-placeholder">
+<ShieldCheck size={27} />
+<h2>Checking secure access…</h2>
+<p>Please wait while BPV verifies your session.</p>
+</div>
+</main>
+)
+}
+
+if (!isAdmin) {
+return (
+<main className="section inner-page">
+<div className="page-heading">
+<span className="eyebrow">BPV WORKSPACE</span>
+<h1>Administration</h1>
+<p>Sign in with your authorised BPV administrator account.</p>
+</div>
+
+    <form className="request-placeholder admin-signin-form" onSubmit={handleLogin}>
+      <ShieldCheck size={27} />
+      <h2>Admin sign-in</h2>
+
+      {error && (
+        <div className="notice-card" role="alert">
+          <p>{error}</p>
+        </div>
+      )}
+
+      <div className="admin-signin-field">
+        <label htmlFor="admin-email">Email address</label>
+        <input
+          id="admin-email"
+          type="email"
+          autoComplete="username"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+      </div>
+
+      <div className="admin-signin-field">
+        <label htmlFor="admin-password">Password</label>
+        <input
+          id="admin-password"
+          type="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+        />
+      </div>
+
+      <button
+        className="button button-primary"
+        type="submit"
+        disabled={submitting}
+      >
+        {submitting ? 'Signing in…' : 'Sign in securely'}
+      </button>
+
+      <Link className="button button-outline" to="/">
+        Return to home <ArrowRight size={16} />
+      </Link>
+    </form>
+  </main>
+)
+
+}
+
+return (
+<main className="section inner-page bpv-admin">
+  <header className="admin-grid-heading">
+    <span className="eyebrow">BPV WORKSPACE / OVERVIEW</span>
+    <h1>Your creative desk.</h1>
+    <p>Manage customer requests from one elegant workspace.</p>
+  </header>
+
+  <section className="admin-grid-stats" aria-label="Request summary">
+    <button type="button" className={'admin-grid-stat admin-grid-stat-button featured ' + (requestFilter === 'all' ? 'active' : '')} aria-pressed={requestFilter === 'all'} onClick={() => { setRequestFilter('all'); document.getElementById('admin-recent-bookings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}>
+      <span>Total requests</span>
+      <strong>{requests.length}</strong>
+      <small>{requestFilter === 'all' ? 'Viewing all requests' : 'Click to view all'} →</small>
+    </button>
+    <button type="button" className={'admin-grid-stat admin-grid-stat-button ' + (requestFilter === 'pending' ? 'active' : '')} aria-pressed={requestFilter === 'pending'} onClick={() => { setRequestFilter('pending'); document.getElementById('admin-recent-bookings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}>
+      <span>Pending requests</span>
+      <strong>{requests.filter((r) => String(r.request_status ?? '').trim().toLowerCase() === 'pending').length}</strong>
+      <small>{requestFilter === 'pending' ? 'Viewing pending' : 'Click to review pending'} →</small>
+    </button>
+    <button type="button" className={'admin-grid-stat admin-grid-stat-button ' + (requestFilter === 'unpaid' ? 'active' : '')} aria-pressed={requestFilter === 'unpaid'} onClick={() => { setRequestFilter('unpaid'); document.getElementById('admin-recent-bookings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}>
+      <span>Unpaid payments</span>
+      <strong>{requests.filter((r) => String(r.payment_status ?? '').trim().toLowerCase() === 'unpaid').length}</strong>
+      <small>{requestFilter === 'unpaid' ? 'Viewing unpaid' : 'Click to review unpaid'} →</small>
+    </button>
+    <button type="button" className="admin-grid-stat admin-grid-stat-button" onClick={() => void verifyAdmin()} disabled={loading}>
+      <span>Workspace</span>
+      <strong className="admin-secure-label">{loading ? 'Checking…' : 'Secure'}</strong>
+      <small>{loading ? 'Verifying access' : 'Click to refresh'} ↻</small>
+    </button>
+  </section>
+
+  <section className="admin-grid-bookings" id="admin-recent-bookings">
+    <div className="admin-grid-section-heading">
+      <div>
+        <span className="eyebrow">BOOKING MANAGEMENT</span>
+        <h2>Recent bookings</h2>
+        <p>Customer details, service and payment overview.</p>
+      </div>
+      <button type="button" className="button button-outline" onClick={() => void verifyAdmin()} disabled={loading}>
+        {loading ? 'Refreshing…' : '↻ Refresh'}
+      </button>
+    </div>
+
+    <div className="admin-grid-toolbar">
+      <div className="admin-grid-filters" role="group" aria-label="Filter bookings">
+        <button type="button" className={requestFilter === 'all' ? 'selected' : ''} aria-pressed={requestFilter === 'all'} onClick={() => setRequestFilter('all')}>All <span>{requests.length}</span></button>
+        <button type="button" className={requestFilter === 'pending' ? 'selected' : ''} aria-pressed={requestFilter === 'pending'} onClick={() => setRequestFilter('pending')}>Pending</button>
+        <button type="button" className={requestFilter === 'unpaid' ? 'selected' : ''} aria-pressed={requestFilter === 'unpaid'} onClick={() => setRequestFilter('unpaid')}>Unpaid</button>
+      </div>
+      <button type="button" className="button button-primary" onClick={() => void handleSignOut()}>Sign out</button>
+    </div>
+
+    {error && <div className="notice-card" role="alert"><p>{error}</p></div>}
+
+    {requests.length === 0 ? (
+      <div className="admin-grid-empty">
+        <ShieldCheck size={28} />
+        <h3>No requests to display</h3>
+        <p>There are no requests available, or none could be loaded.</p>
+      </div>
+    ) : (
+      <div className="admin-grid-list">
+        {requests.filter((r) => {
+          if (requestFilter === 'pending') return String(r.request_status ?? '').trim().toLowerCase() === 'pending'
+          if (requestFilter === 'unpaid') return String(r.payment_status ?? '').trim().toLowerCase() === 'unpaid'
+          return true
+        }).map((request) => (
+          <article className="admin-grid-card" key={request.id}>
+            <div className="admin-grid-card-head">
+              <div>
+                <span className="admin-grid-overline">BOOKING REFERENCE</span>
+                <h3>{request.booking_reference}</h3>
+              </div>
+              <span className={'admin-grid-status ' + (String(request.request_status ?? '').trim().toLowerCase() === 'pending' ? 'pending' : 'neutral')}>
+                {request.request_status}
+              </span>
+            </div>
+
+            <div className="admin-grid-customer">
+              <div className="admin-grid-avatar">{String(request.customer_name || '?').trim().charAt(0).toUpperCase()}</div>
+              <div className="admin-grid-customer-info">
+                <strong>{request.customer_name}</strong>
+                <span>{request.customer_email}</span>
+                <span>{request.customer_phone}</span>
+              </div>
+            </div>
+
+            <div className="admin-grid-details">
+              <div><span>Service</span><strong>{request.service_type}</strong></div>
+              <div><span>Recipient</span><strong>{request.recipient_name}</strong></div>
+              <div><span>Message type</span><strong>{request.message_type}</strong></div>
+              <div><span>Delivery</span><strong>{request.delivery_type}</strong></div>
+            </div>
+
+            <div className="admin-grid-payment">
+              <div><span>Booking amount</span><strong>₦{Number(request.amount_ngn).toLocaleString('en-NG')}</strong></div>
+              <span className={'admin-grid-status ' + (String(request.payment_status ?? '').trim().toLowerCase() === 'unpaid' ? 'unpaid' : 'neutral')}>
+                {request.payment_status}
+              </span>
+            </div>
+
+            <div className="admin-grid-actions" aria-label="Booking actions">
+              {String(request.request_status ?? '').toLowerCase() === 'pending' && (
+                <button
+                  type="button"
+                  className="button button-outline"
+                  disabled={updatingRequestId !== null}
+                  onClick={() => void updateBooking(
+                    request,
+                    { request_status: 'accepted' },
+                    `Accept booking ${request.booking_reference}?`,
+                  )}
+                >
+                  {updatingRequestId === request.id ? 'Updating…' : 'Accept booking'}
+                </button>
+              )}
+
+              {String(request.request_status ?? '').toLowerCase() === 'accepted' && (
+                <button
+                  type="button"
+                  className="button button-outline"
+                  disabled={updatingRequestId !== null}
+                  onClick={() => void updateBooking(
+                    request,
+                    { request_status: 'in progress' },
+                    `Start work on booking ${request.booking_reference}?`,
+                  )}
+                >
+                  Start work
+                </button>
+              )}
+
+              {String(request.request_status ?? '').toLowerCase() === 'in progress' && (
+                <button
+                  type="button"
+                  className="button button-outline"
+                  disabled={updatingRequestId !== null}
+                  onClick={() => void updateBooking(
+                    request,
+                    { request_status: 'completed' },
+                    `Mark booking ${request.booking_reference} as completed? Confirm the service has been delivered.`,
+                  )}
+                >
+                  Mark completed
+                </button>
+              )}
+
+              {!['completed', 'cancelled'].includes(
+                String(request.request_status ?? '').toLowerCase()
+              ) && (
+                <button
+                  type="button"
+                  className="button button-outline"
+                  disabled={updatingRequestId !== null}
+                  onClick={() => void updateBooking(
+                    request,
+                    { request_status: 'cancelled' },
+                    `Cancel booking ${request.booking_reference}?`,
+                  )}
+                >
+                  Cancel booking
+                </button>
+              )}
+
+              {!['paid', 'cancelled', 'refunded'].includes(
+                String(request.payment_status ?? '').toLowerCase()
+              ) && String(request.request_status ?? '').toLowerCase() !== 'cancelled' && (
+                <button
+                  type="button"
+                  className="button button-primary"
+                  disabled={updatingRequestId !== null}
+                  onClick={() => void updateBooking(
+                    request,
+                    {
+                      payment_status: 'paid',
+                      payment_verified_at: new Date().toISOString(),
+                    },
+                    `Have you independently confirmed that the full payment for booking ${request.booking_reference} has arrived in your account? Only confirm if you have checked your receiving account.`,
+                  )}
+                >
+                  Confirm payment received
+                </button>
+              )}
+            </div>
+
+            <details className="admin-grid-more">
+              <summary>View payment and submission details</summary>
+              <p><strong>Payment reference:</strong> {request.payment_reference || 'Not supplied'}</p>
+              <p><strong>Submitted:</strong> {new Date(request.created_at).toLocaleString()}</p>
+            </details>
+          </article>
+        ))}
+        {requests.filter((r) => {
+          if (requestFilter === 'pending') return String(r.request_status ?? '').trim().toLowerCase() === 'pending'
+          if (requestFilter === 'unpaid') return String(r.payment_status ?? '').trim().toLowerCase() === 'unpaid'
+          return true
+        }).length === 0 && (
+          <div className="admin-grid-empty">
+            <h3>No matching bookings</h3>
+            <p>Choose another filter to see requests.</p>
+          </div>
+        )}
+      </div>
+    )}
+    <p className="admin-grid-note">Payment status is shown for review only. Independently confirm transfers before marking any payment as verified.</p>
+  </section>
+</main>
+
+)
 }
 
 function NotFoundPage() {
@@ -718,7 +1242,7 @@ function NotFoundPage() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/bpv-website">
       <div className="app-shell">
         <Header />
         <Routes>
