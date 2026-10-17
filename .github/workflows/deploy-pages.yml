@@ -34,6 +34,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+
+      - name: Check Supabase configuration
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$VITE_SUPABASE_URL" && echo "Supabase URL: PRESENT" || { echo "Supabase URL: MISSING"; exit 1; }
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" && echo "Supabase publishable key: PRESENT" || { echo "Supabase publishable key: MISSING"; exit 1; }
+
+
       - name: Build website
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
