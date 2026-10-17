@@ -3104,3 +3104,44 @@ textarea:disabled {
     transition: none;
   }
 }
+
+
+/* BPV logo image */
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Homepage promotional flyer */
+.promo-section {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.promo-inner {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--bpv-border);
+  border-radius: 14px;
+  background: var(--bpv-panel);
+}
+
+.promo-inner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

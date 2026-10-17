@@ -50,7 +50,12 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link className="brand" to="/" onClick={closeMenu} aria-label="BPV home">
-          <span className="brand-mark"><PenLine size={20} strokeWidth={2.2} /></span>
+          <span className="brand-mark">
+            <img
+              src={`${import.meta.env.BASE_URL}images/bpv-logo.jpg`}
+              alt="Bibliophile's Pen & Voice logo"
+            />
+          </span>
           <span className="brand-copy">
             <strong>BPV</strong>
             <small>Bibliophile's Pen & Voice</small>
@@ -198,6 +203,16 @@ function HomePage() {
         <div className="other-service">
           <div><strong>Something a little different?</strong><p>We also welcome custom requests for unique moments and messages.</p></div>
           <Link className="button button-outline" to="/request">Tell us what you need <ArrowRight size={16} /></Link>
+        </div>
+      </section>
+
+      <section className="promo-section" aria-label="BPV promotion">
+        <div className="promo-inner">
+          <img
+            src={`${import.meta.env.BASE_URL}images/bpv-promo.jpg`}
+            alt="Bibliophile's Pen & Voice promotional flyer"
+            loading="lazy"
+          />
         </div>
       </section>
 
