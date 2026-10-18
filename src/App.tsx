@@ -74,8 +74,8 @@ function Header() {
 
         <nav className={`main-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
           <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
-          <a href="/#services" onClick={closeMenu}>Services</a>
-          <a href="/#pricing" onClick={closeMenu}>Pricing</a>
+          <a href="/bpv-website/#services" onClick={closeMenu}>Services</a>
+          <a href="/bpv-website/#pricing" onClick={closeMenu}>Pricing</a>
           <Link className="nav-cta" to="/request" onClick={closeMenu}>Make a request <ArrowRight size={15} /></Link>
         </nav>
       </div>
@@ -90,11 +90,11 @@ function CompactNavigation() {
         <PenLine size={20} />
         <span>Home</span>
       </Link>
-      <a className="compact-nav-item" href="/#services" aria-label="Services">
+      <a className="compact-nav-item" href="/bpv-website/#services" aria-label="Services">
         <BookOpen size={20} />
         <span>Services</span>
       </a>
-      <a className="compact-nav-item" href="/#pricing" aria-label="Pricing">
+      <a className="compact-nav-item" href="/bpv-website/#pricing" aria-label="Pricing">
         <Sparkles size={20} />
         <span>Pricing</span>
       </a>
